@@ -26,15 +26,17 @@ without_interrupts(|| {
 Configure a timer.
 
 ```rust
+use ruduino::modules::{ClockSource16, Timer16, WaveformGenerationMode16};
+
 const CPU_FREQUENCY_HZ: u64 = 16_000_000;
 const DESIRED_HZ_TIM1: f64 = 2.0;
 const TIM1_PRESCALER: u64 = 1024;
 const INTERRUPT_EVERY_1_HZ_1024_PRESCALER: u16 =
     ((CPU_FREQUENCY_HZ as f64 / (DESIRED_HZ_TIM1 * TIM1_PRESCALER as f64)) as u64 - 1) as u16;
 
-timer1::Timer::new()
-    .waveform_generation_mode(timer1::WaveformGenerationMode::ClearOnTimerMatchOutputCompare)
-    .clock_source(timer1::ClockSource::Prescale1024)
+Timer16::setup()
+    .waveform_generation_mode(WaveformGenerationMode16::ClearOnTimerMatchOutputCompare)
+    .clock_source(ClockSource16::Prescale1024)
     .output_compare_1(Some(INTERRUPT_EVERY_1_HZ_1024_PRESCALER))
     .configure();
 ```
